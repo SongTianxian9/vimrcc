@@ -1,0 +1,416 @@
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+" --------------------
+"  plugin install
+" --------------------
+call plug#begin('~/.vim/plugged')
+
+" 中文文档
+Plug 'yianwillis/vimcdoc'
+
+" colorscheme
+Plug 'lifepillar/vim-gruvbox8'
+
+" linestatus
+" Plug 'itchyny/lightline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'SongTianxian9/vim-airline-themes'
+
+" file navigation: <ctrl>-n
+Plug 'ryanoasis/vim-devicons'
+Plug 'preservim/nerdtree'
+Plug 'bagrat/vim-buffet'
+
+" %
+Plug 'andymass/vim-matchup'
+Plug 'https://github.com/kien/rainbow_parentheses.vim.git'
+
+" comment: gc, <Leader>-c-c
+Plug 'tpope/vim-commentary'
+
+" easymotion
+Plug 'https://github.com/easymotion/vim-easymotion.git'
+
+" LSP
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+" auto complete
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" diagnose
+Plug 'dense-analysis/ale'
+Plug 'rhysd/vim-lsp-ale'
+
+Plug 'SirVer/ultisnips'
+Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
+Plug 'thomasfaingnaert/vim-lsp-snippets'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+" brew tap universal-ctags/universal-ctags
+" brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+" tag view
+" gen tagfile
+Plug 'ludovicchabant/vim-gutentags', { 'do': '!brew tap universal-ctags/universal-ctags && brew install --HEAD universal-ctags/universal-ctags/universal-ctags'}
+Plug 'liuchengxu/vista.vim'
+Plug 'preservim/tagbar'
+
+" Find
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+" Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
+
+" floaterm
+Plug 'voldikss/vim-floaterm'
+
+" git
+Plug 'https://github.com/tpope/vim-fugitive.git'
+
+" auto pair
+Plug 'jiangmiao/auto-pairs'
+
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+
+Plug 'https://github.com/t9md/vim-choosewin.git'
+
+call plug#end()
+
+" --------------------
+"  general
+" --------------------
+
+" basic
+set nocompatible
+set history=500
+filetype plugin indent on
+syntax on
+
+" colorscheme
+set background=dark
+colorscheme gruvbox8
+
+let &t_ut=''
+
+" --------------------
+"  user interface
+" --------------------
+
+" line number
+set nu " number lines
+" set rnu " relative line numbering
+
+
+" search
+set incsearch " incremental search (as string is being typed)
+set hls " highlight search
+set ignorecase
+set smartcase
+noremap n nzz
+noremap N Nzz
+
+" No annoying sound on errors
+" set noerrorbells
+" set novisualbell
+" set t_vb=
+set belloff=all
+set tm=500
+
+" tab
+set smarttab
+set autoindent smartindent shiftround
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+
+" indent
+set ai "Auto indent
+set si "Smart indent
+
+" line
+set lbr " line break
+set wrap "Wrap lines
+" height current line
+augroup CursorLineOnlyInActiveWindow
+    autocmd!
+    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
+augroup END
+" Return to last edit position when opening files
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" window
+set splitbelow
+set splitright
+" guiwindow
+set guioptions-=m  "remove menu bar
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
+set guioptions-=L  "remove left-hand scroll bar
+hi VertSplit guibg=bg guifg=bg
+set guifont=JetBrainsMonoNerdFontCompleteM-Medium:h14
+
+" Turn backup off
+set nobackup
+set nowb
+set noswapfile
+
+" misc
+" set list
+" set listchars=tab:>-,trail:-,nbsp:%,eol:<,extends:»,precedes:« " Unprintable chars mapping
+
+set completeopt+=menuone
+
+" set listchars=tab:>>,nbsp:~ " set list to see tabs and non-breakable spaces
+set showmatch
+set scrolloff=10 " show lines above and below cursor (when possible)
+set cmdheight=1
+set lazyredraw
+" set autochdir
+set hidden " allow auto-hiding of edited buffers
+set laststatus=2
+set encoding=UTF-8
+
+" auto wrap
+" 如果您在插入模式下输入时的目标是在窗口边缘自动软换行文本（仅在视觉上）
+" set textwidth=0
+" set wrapmargin=0
+" set wrap
+" set linebreak # (optional - breaks by word rather than character)
+" 如果您在输入插入模式时的目标是在 80 列处自动硬换行文本（通过在实际文本文件中插入新行）
+set textwidth=80
+set wrapmargin=0
+set formatoptions+=t
+set linebreak " (optional - breaks by word rather than character)
+" 如果您的目标是在插入模式下键入时自动软换行 80 列文本（仅在视觉上）ji jaofw
+" set textwidth=0
+" set wrapmargin=0
+" set wrap
+" set linebreak # (optional - breaks by word rather than character)
+" set columns=80 # <<< THIS IS THE IMPORTANT PART
+
+" set mouse+=a
+set backspace=indent,start
+set whichwrap+=<,>,h,l
+set shortmess+=I
+set wildmode=longest,list
+set wildmenu
+
+" --------------------
+"  map
+" --------------------
+
+let mapleader = " "
+
+
+nnoremap Q gq
+
+" insert mode move
+inoremap <C-h> <Left>
+inoremap <C-l> <Right>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+
+" windows navigate
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+
+" tab switch tabfile
+" nnoremap <silent> <tab> :tabn<CR>
+" nnoremap <silent> <tab> :bnext<CR>
+" nnoremap <silent> <leader>x :q<CR>
+" nnoremap <silent> <leader>s :w<CR>
+noremap <silent> <Tab> :bn<CR>
+noremap <silent> <S-Tab> :bp<CR>
+noremap <silent> <Leader><Tab> :Bw<CR>
+noremap <silent> <Leader><S-Tab> :Bw!<CR>
+noremap <silent> <C-t> :tabnew <CR>
+let g:buffet_powerline_separators = 1
+let g:buffet_show_index = 1
+let g:buffet_use_devicons = 1
+let g:buffet_tab_icon = "\uf00a"
+let g:buffet_left_trunc_icon = "\uf0a8"
+let g:buffet_right_trunc_icon = "\uf0a9"
+
+" tabline
+nnoremap <leader>1 <Plug>BuffetSwitch(1)
+nnoremap <leader>2 <Plug>BuffetSwitch(2)
+nnoremap <leader>3 <Plug>BuffetSwitch(3)
+nnoremap <leader>4 <Plug>BuffetSwitch(4)
+nnoremap <leader>5 <Plug>BuffetSwitch(5)
+nnoremap <leader>6 <Plug>BuffetSwitch(6)
+nnoremap <leader>7 <Plug>BuffetSwitch(7)
+nnoremap <leader>8 <Plug>BuffetSwitch(8)
+nnoremap <leader>9 <Plug>BuffetSwitch(9)
+nnoremap <leader>0 <Plug>BuffetSwitch(10)
+
+
+" Plugin
+nnoremap <silent> <leader>j :FZF ~<CR>
+nnoremap <silent> <c-n> :NERDTreeToggle<CR>
+nnoremap <silent> <leader>a :ALENextWrap<CR>
+nnoremap <silent> <leader>A :ALEPreviousWrap<CR>
+nnoremap <silent> <leader>v :Vista!!<CR>
+map  <leader>;  <Plug>(choosewin)
+nnoremap <silent> <leader>c :TagbarToggle<CR>
+nnoremap <silent> <leader>fv :FloatermNew --wintype=vsplit <CR>
+
+" if index(['c'], &filetype) != -1
+" 	nnoremap <silent> <leader>r :FloatermNew! --autoclose=0 gcc % -o %< && ./%< <CR>
+" endif
+
+augroup build_and_run
+    autocmd!
+    au FileType c nnoremap <silent> <leader>r
+    \ :FloatermNew! --autoclose=0 --position=bottomright --height=0.5
+    \ gcc-11 -Wall -Werror -pedantic -std=c89 -g % -o %< && ./%< <CR>
+augroup END
+
+" --------------------
+" Plugin configuration
+" --------------------
+
+" NERDTree
+" ----------
+" nnoremap <silent> <c-n> :NERDTreeToggle<CR>
+
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" AIRLINE
+" ----------
+let g:airline_theme = 'kalisi'
+" call airline#parts#define_minwidth('YuFei 👫 XiaoQ', 50)
+let g:airline_section_c = airline#section#create_left([ 'XiaoQ 👫 TianX', ' ', 'file', ])
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#formatter = 'unique_tail'
+" let g:airline_statusline_ontop=1
+
+" LSP
+" ----------
+" if executable('pyls')
+"     " pip install python-language-server
+"     au User lsp_setup call lsp#register_server({
+"         \ 'name': 'pyls',
+"         \ 'cmd': {server_info->['pyls']},
+"         \ 'allowlist': ['python'],
+"         \ })
+" endif
+
+function! s:on_lsp_buffer_enabled() abort
+    " setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nnoremap <buffer> <silent> gd :LspDefinition<CR>
+    nnoremap <buffer> <silent> gs :LspDocumentSymbolSearch<CR>
+    nnoremap <buffer> <silent> gS :LspWorkspaceSymbolSearch<CR>
+    nnoremap <buffer> <silent> gr :LspReferences<CR>
+    nnoremap <buffer> <silent> gi :LspImplementation<CR>
+    nnoremap <buffer> <silent> gt :LspTypeDefinition<CR>
+    nnoremap <buffer> <silent> rn :LspRename<CR>
+    nnoremap <buffer> [g :LspPreviousDiagnostic<CR>
+    nnoremap <buffer> ]g :LspNextDiagnostic<CR>
+    nnoremap <buffer> K :LspHover<CR>
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    let g:lsp_format_sync_timeout = 1000
+    " autocmd! BufWritePre *.rs,*.c,*.cpp call execute('LspDocumentFormatSync')
+
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+" let g:lsp_diagnostics_enabled = 0         " disable diagnostics support
+
+
+" ASYNCOMPLETE.vim
+imap <c-space> <Plug>(asyncomplete_force_refresh)
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+" Snippets
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+
+" vista.vim
+" ------------
+" nnoremap <silent> <leader>v :Vista!!<CR>
+"
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+" GUTENTAG
+" ------------
+set statusline+=%{gutentags#statusline()}
+let g:gutentags_project_root = ['Makefile', '.git', '.root']
+let g:gutentags_ctags_tagfile = '.tags'
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+endif
+
+
+" ALE
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\}
+" Set this variable to 1 to fix files when you save them.
+let g:ale_fix_on_save = 1
+"airline
+let g:airline#extensions#ale#enabled = 1
+" nnoremap <silent> <leader>a :ALENextWrap<CR>
+" nnoremap <silent> <leader>A :ALEPreviousWrap<CR>
+
+" auto pair
+let g:AutoPairsFlyMode = 1
+let g:AutoPairsMapCh = 0
+
+" which key
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+
+" floaterm
+
+let g:floaterm_keymap_new = '<leader>ff'
+let g:floaterm_keymap_prev = '<leader>fp'
+let g:floaterm_keymap_next = '<leader>fn'
+let g:floaterm_keymap_first = '<leader>fa'
+let g:floaterm_keymap_last = '<leader>fe'
+let g:floaterm_keymap_hide = '<leader>fh'
+let g:floaterm_keymap_show = '<leader>fs'
+let g:floaterm_keymap_kill = '<leader>fk'
+let g:floaterm_keymap_toggle = '<leader>ft'
+
+let g:floaterm_width = 0.5
+let g:floaterm_height = 0.9
+let g:floaterm_position = 'right'
+
+
+" rainbow
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
