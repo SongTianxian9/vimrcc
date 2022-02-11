@@ -208,7 +208,7 @@ set wildmenu
 "  map
 " --------------------
 
-let mapleader = " "
+let mapleader = ";"
 
 
 nnoremap Q gq
@@ -390,7 +390,7 @@ let g:AutoPairsFlyMode = 1
 let g:AutoPairsMapCh = 0
 
 " which key
-nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+nnoremap <silent> <leader> :WhichKey ';'<CR>
 
 " floaterm
 
